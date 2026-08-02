@@ -91,11 +91,27 @@
   .hero-note { margin-top: 16px; font-size: .85rem; opacity: .75; }
 
   .waitlist-form { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 30px; max-width: 460px; }
-  .waitlist-form input {
+  .waitlist-form input[type="email"] {
     flex: 1; min-width: 220px; border-radius: 999px; border: 2px solid var(--teal);
     background: var(--paper); padding: 13px 20px; font-family: inherit; font-size: 1rem;
   }
-  .waitlist-form input:focus { outline: 3px solid var(--coral); outline-offset: 2px; }
+  .waitlist-form input[type="email"]:focus { outline: 3px solid var(--coral); outline-offset: 2px; }
+
+  /* seeker / lister choice — sits on the dark closing panel */
+  .who { flex: 0 0 100%; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 0 0 6px; }
+  .who input { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
+  .who label {
+    display: inline-block; border-radius: 999px; cursor: pointer;
+    padding: 9px 18px; font-size: .9rem; font-weight: 600;
+    border: 2px solid rgba(255,253,247,.35); color: var(--paper);
+    transition: background .15s ease, color .15s ease, border-color .15s ease;
+  }
+  .who label:hover { border-color: rgba(255,253,247,.75); }
+  .who input:checked + label { background: var(--coral); border-color: var(--coral); color: var(--ink); }
+  .who input:focus-visible + label { outline: 3px solid var(--paper); outline-offset: 3px; }
+
+  .form-status { margin-top: 18px; font-size: .95rem; min-height: 1.2em; }
+  .form-status a { color: inherit; }
 
   .hero-art { position: relative; }
   .hero-art .stage {
@@ -424,13 +440,24 @@
       <p class="eyebrow" style="background:rgba(255,255,255,.12);color:#fffdf7;">Coming soon</p>
       <h2 class="display">Be first in when Roomie opens.</h2>
       <p>Leave your email and we'll tell you the day it goes live — for people looking, and for people with a room to fill.</p>
-      <!-- TODO: replace YOUR_FORM_ID with the real Formspree form ID (formspree.io → new form → copy the ID from the endpoint URL). Until then, submissions go nowhere. -->
-      <form class="waitlist-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+      <form id="waitlist-form" class="waitlist-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+        <div class="who">
+          <input type="radio" id="who-seeker" name="interest" value="Looking for a room" checked>
+          <label for="who-seeker">Looking for a room</label>
+          <input type="radio" id="who-lister" name="interest" value="Has a room to list">
+          <label for="who-lister">I have a room to list</label>
+        </div>
         <label for="waitlist-email" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);">Email address</label>
         <input id="waitlist-email" name="email" type="email" required placeholder="you@example.com" class="focus-ring">
         <input type="hidden" name="_subject" value="New Roomie waitlist signup">
+        <div style="position:absolute;left:-9999px;" aria-hidden="true">
+          <label for="waitlist-gotcha">Leave this field empty</label>
+          <input type="text" id="waitlist-gotcha" name="_gotcha" tabindex="-1" autocomplete="off">
+        </div>
         <button type="submit" class="btn btn-primary focus-ring">Notify me</button>
       </form>
+      <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
+      <p class="hero-note" style="max-width:46ch;margin:6px auto 0;">We'll only use your address to tell you when Roomie opens. Nothing else, and no one else.</p>
     </div>
   </section>
 </main>
@@ -454,6 +481,54 @@
 </div>
 
 <script>
+  // TODO: paste the Formspree form ID here — Formspree dashboard → your form →
+  // the endpoint reads https://formspree.io/f/XXXXXXXX, and the XXXXXXXX is the ID.
+  // Until it is replaced, submissions fail and the form says so rather than
+  // pretending to succeed.
+  const FORMSPREE_ID = 'YOUR_FORM_ID';
+
+  const waitlistForm = document.getElementById('waitlist-form');
+  const formStatus = document.getElementById('form-status');
+  const endpoint = 'https://formspree.io/f/' + FORMSPREE_ID;
+  waitlistForm.setAttribute('action', endpoint);
+
+  // Someone arriving from the "Tell me when boosts open" button is a lister —
+  // preselect that so the form matches the button they clicked.
+  document.querySelectorAll('a[href="#waitlist"]').forEach(function (link) {
+    link.addEventListener('click', function () {
+      if (link.textContent.toLowerCase().indexOf('boost') !== -1) {
+        document.getElementById('who-lister').checked = true;
+      }
+    });
+  });
+
+  waitlistForm.addEventListener('submit', function (event) {
+    event.preventDefault();
+    const button = waitlistForm.querySelector('button[type="submit"]');
+    const original = button.textContent;
+    button.disabled = true;
+    button.textContent = 'Sending…';
+    formStatus.textContent = '';
+
+    fetch(endpoint, {
+      method: 'POST',
+      body: new FormData(waitlistForm),
+      headers: { Accept: 'application/json' },
+    })
+      .then(function (response) {
+        if (!response.ok) throw new Error('Request failed: ' + response.status);
+        waitlistForm.hidden = true;
+        formStatus.textContent = "You're on the list. We'll email you the day Roomie opens.";
+      })
+      .catch(function () {
+        button.disabled = false;
+        button.textContent = original;
+        formStatus.innerHTML =
+          'That did not go through. Please email ' +
+          '<a href="mailto:noam123av@gmail.com">noam123av@gmail.com</a> and we will add you by hand.';
+      });
+  });
+
   const menuButton = document.getElementById('menu-button');
   const mobileMenu = document.getElementById('mobile-menu');
   menuButton.addEventListener('click', function () {
