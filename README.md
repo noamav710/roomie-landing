@@ -59,6 +59,25 @@ changing claims:
   city, the hero note: "Android first. Starting in Beer Sheva." Say "starting
   in", never "only" — `v1-scope.md` plans a second city once the first works.
 - No in-app chat — calling is the only contact method.
+- **No search and no filters.** v1 has neither; the app has no list UI at all,
+  only the map. "Filter by price and move-in date" was live on this page and was
+  false. Don't reintroduce it, and don't use a magnifying-glass icon.
+- **Compatibility is person-to-person.** `src/app/(tabs)/explore.tsx` is the
+  "Roommates" tab — "People looking to share a place" — and scores you against
+  other *users*. `src/components/property-details.tsx` has no match score and no
+  resident profiles. Say "how well you match the people looking to share a
+  place"; **never** "the people already living there." (The Play Store listing
+  still has this wrong — fix before submission.)
+- **The no-account claim splits.** `firestore.rules` is `allow read: if true`
+  on `apartments` but `signedIn()` on `users` and `endorsements`. So: map,
+  listings and phone numbers are open signed-out; profiles, match scores and
+  endorsements need a free account. Don't flatten this into "no account needed."
+- **Boost = placement only.** It may say a boost gives a distinct map pin, a
+  Boosted badge, and a set number of days. Never a faster rental, more calls, or
+  any outcome — that distinction is going into the Terms. Never "top of the
+  list": there is no list. No price on the page; the packages are unvalidated.
+- Don't mention the dormant early-bird token system, house rules, move-in dates,
+  a star average on profiles, or a step count for the listing form.
 - No verification badge, no account required to browse.
 - Location is on-device only; phone numbers are shown the way a printed flyer
   would show them (not "collected").
