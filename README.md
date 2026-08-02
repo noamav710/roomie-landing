@@ -78,25 +78,53 @@ changing claims:
   list": there is no list. No price on the page; the packages are unvalidated.
 - Don't mention the dormant early-bird token system, house rules, move-in dates,
   a star average on profiles, or a step count for the listing form.
-- No verification badge, no account required to browse.
+- No verification badge — the component exists but is hidden for v1.
 - Location is on-device only; phone numbers are shown the way a printed flyer
   would show them (not "collected").
 
+## The waitlist form
+
+Posts to Formspree (`formspree.io/f/mkodlarw`), wired and verified 2026-08-02 —
+real submissions return `{"ok":true}` and the mail arrives. It submits by
+`fetch` so the visitor stays on the page; a bare Formspree POST would redirect
+them to a Formspree-branded thank-you page.
+
+- The ID lives in **two places that must stay in sync**: the `FORMSPREE_ID`
+  constant at the top of the inline script, and the form's `action` attribute,
+  which is the no-JavaScript fallback.
+- A visible seeker/lister radio records which kind of signup it is. Arriving via
+  the boost CTA preselects the lister option. The launch plan is supply-first,
+  so the lister half of the list is the valuable one.
+- `_gotcha` is a honeypot — an off-screen text input, deliberately not
+  `type="hidden"`, which bots skip. Formspree silently drops anything that fills
+  it.
+- **Gotcha:** `.waitlist-form` sets `display: flex`, which beats the `hidden`
+  attribute's `display: none`. Hiding the form on success needs the explicit
+  `.waitlist-form[hidden]` rule — without it the confirmation appears *and* the
+  form stays on screen, looking like the submission failed.
+- The radio labels need their `:focus-visible` ring: the real input is visually
+  hidden, so without it the control is unusable by keyboard. Test with real Tab
+  and Arrow key presses — programmatic `.focus()` does not reliably trigger
+  `:focus-visible`, and will look like a false failure.
+
 ## Known gaps
 
-- **The waitlist form doesn't reliably work.** Browsers block or mishandle
-  `mailto:` form POSTs, and it's the page's only signup path. Swap for Formspree
-  or similar before driving traffic here.
-- **Terms and account-deletion pages are live but unlinked.** `roomie-legal`
-  serves `/terms-of-use` and `/account-deletion` alongside `/privacy-policy`;
-  the footer links only the last. Google Play requires a reachable
-  account-deletion URL.
-- OG image reuses `assets/icon.png` (1024×1024) instead of ~1200×630, so link
-  previews crop it.
-- Hero graphic is an original SVG mockup, not a real product screenshot.
+- Hero graphic is an original SVG mockup — a map with rent pins — not a real
+  product screenshot. It must stay a *map*: v1 has no list UI, and the previous
+  art depicted a scrollable results list, which the app cannot show.
 - Play Store hi-res icon / feature graphic are Play Console assets, not files
   here. Swap the "Get notified at launch" CTA for a Play Store link once the
   listing is public.
+- Formspree is a form-to-email relay, not a list manager, and there is no double
+  opt-in. If the waitlist grows past a few dozen, move to Mailchimp or
+  Buttondown. Signups live only in Formspree and the notification emails —
+  nothing durable on our side.
+- The boost section says it "isn't on sale yet", which stays true until *both*
+  the boost terms are published (draft on branch `boost-terms-draft` in
+  roomie-legal, awaiting the lawyer) and the PayPal webhook ships.
+
+Closed recently: the dead `mailto:` form, the unlinked terms and
+account-deletion pages, and the square OG image (now a real 1200×630).
 
 ## Older draft
 
