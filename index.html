@@ -91,6 +91,8 @@
   .hero-note { margin-top: 16px; font-size: .85rem; opacity: .75; }
 
   .waitlist-form { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 30px; max-width: 460px; }
+  /* display:flex above would otherwise beat the hidden attribute's display:none */
+  .waitlist-form[hidden] { display: none; }
   .waitlist-form input[type="email"] {
     flex: 1; min-width: 220px; border-radius: 999px; border: 2px solid var(--teal);
     background: var(--paper); padding: 13px 20px; font-family: inherit; font-size: 1rem;
@@ -440,7 +442,7 @@
       <p class="eyebrow" style="background:rgba(255,255,255,.12);color:#fffdf7;">Coming soon</p>
       <h2 class="display">Be first in when Roomie opens.</h2>
       <p>Leave your email and we'll tell you the day it goes live — for people looking, and for people with a room to fill.</p>
-      <form id="waitlist-form" class="waitlist-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+      <form id="waitlist-form" class="waitlist-form" action="https://formspree.io/f/mkodlarw" method="POST">
         <div class="who">
           <input type="radio" id="who-seeker" name="interest" value="Looking for a room" checked>
           <label for="who-seeker">Looking for a room</label>
@@ -481,11 +483,9 @@
 </div>
 
 <script>
-  // TODO: paste the Formspree form ID here — Formspree dashboard → your form →
-  // the endpoint reads https://formspree.io/f/XXXXXXXX, and the XXXXXXXX is the ID.
-  // Until it is replaced, submissions fail and the form says so rather than
-  // pretending to succeed.
-  const FORMSPREE_ID = 'YOUR_FORM_ID';
+  // Formspree form ID. Keep in sync with the form's action attribute, which is
+  // the no-JavaScript fallback.
+  const FORMSPREE_ID = 'mkodlarw';
 
   const waitlistForm = document.getElementById('waitlist-form');
   const formStatus = document.getElementById('form-status');
