@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Roomie — Student housing in Beer Sheva, no middleman</title>
-<meta name="description" content="Roomie is a free listings board for Beer Sheva student housing. Browse real rooms near BGU and call the lister directly — no chat threads, no bidding, no account required to look.">
+<title>Roomie — Student housing, no middleman</title>
+<meta name="description" content="Roomie is a free listings board for student housing. Browse real rooms near campus and call the lister directly — no chat threads, no bidding, no account required to look.">
 <link rel="canonical" href="https://roomie.co.il/">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Roomie — Student housing in Beer Sheva, no middleman">
-<meta property="og:description" content="Free room listings for BGU students. Call the lister directly — no chat, no middleman.">
+<meta property="og:title" content="Roomie — Student housing, no middleman">
+<meta property="og:description" content="Free room listings for students. Call the lister directly — no chat, no middleman.">
 <meta property="og:url" content="https://roomie.co.il/">
 <meta property="og:image" content="https://roomie.co.il/assets/icon.png">
 <link rel="icon" type="image/png" href="/assets/favicon.png">
@@ -167,29 +167,33 @@
 <body>
 <div class="grain">
 
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <linearGradient id="rm-house" x1="26" y1="100" x2="94" y2="16" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#1A4F55"/>
+      <stop offset="52%" stop-color="#3E9C93"/>
+      <stop offset="100%" stop-color="#9CE0D2"/>
+    </linearGradient>
+    <linearGradient id="rm-arrow" x1="52" y1="84" x2="112" y2="18" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#4B9C93"/>
+      <stop offset="100%" stop-color="#B7F0E2"/>
+    </linearGradient>
+    <g id="roomie-mark">
+      <path d="M26 50 L55.5 20.5 Q60 16 64.5 20.5 L94 50 L94 95 Q94 100 89 100 L31 100 Q26 100 26 95 Z"
+            fill="url(#rm-house)" stroke="#0F3033" stroke-width="3" stroke-linejoin="round"/>
+      <path d="M52.2 95.6 L100.2 39.6 L105.8 44.5 L112 18 L86.2 27.5 L91.9 32.4 L43.9 88.4 Z"
+            fill="url(#rm-arrow)" stroke="#0F3033" stroke-width="3" stroke-linejoin="round"/>
+      <path fill-rule="evenodd" fill="#FBFAF0" stroke="#0F3033" stroke-width="2.5" stroke-linejoin="round"
+            d="M43 40 L63 40 C71.8 40 78 46.2 78 54 C78 61.8 71.8 68 63 68 L78 88 L67 88 L55 72 L55 88 L43 88 Z
+               M55 50 L63 50 C65.2 50 67 51.8 67 54 C67 56.2 65.2 58 63 58 L55 58 Z"/>
+    </g>
+  </defs>
+</svg>
+
 <header class="wrap">
   <nav aria-label="Primary">
     <a href="#top" class="brand focus-ring" aria-label="Roomie home">
-      <svg viewBox="217 144 731 661" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <defs>
-          <linearGradient id="nav-left" x1="512" y1="190" x2="296" y2="792" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stop-color="#2F8079"/><stop offset="100%" stop-color="#123B3E"/>
-          </linearGradient>
-          <linearGradient id="nav-right" x1="512" y1="190" x2="774" y2="792" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stop-color="#9CE0D2"/><stop offset="100%" stop-color="#3E9C93"/>
-          </linearGradient>
-          <linearGradient id="nav-arrow" x1="0" y1="0" x2="520" y2="0" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stop-color="#4B9C93"/><stop offset="100%" stop-color="#B7F0E2"/>
-          </linearGradient>
-        </defs>
-        <path d="M 512 190 L 296 400 L 250 400 L 250 452 L 296 452 L 296 792 L 728 792 L 728 452 L 774 452 L 774 400 L 728 400 Z" fill="none" stroke="#0F3033" stroke-width="26" stroke-linejoin="round"/>
-        <path d="M 512 190 L 296 400 L 250 400 L 250 452 L 296 452 L 296 792 L 512 792 Z" fill="url(#nav-left)"/>
-        <path d="M 512 190 L 512 792 L 728 792 L 728 452 L 774 452 L 774 400 L 728 400 Z" fill="url(#nav-right)"/>
-        <g transform="translate(618,656) rotate(-52)">
-          <path d="M 0 -30 L 340 -30 L 340 -104 L 520 0 L 340 104 L 340 30 L 0 30 Z" fill="url(#nav-arrow)" stroke="#0F3033" stroke-width="20" stroke-linejoin="round"/>
-        </g>
-        <text x="452" y="700" font-family="DejaVu Sans, Arial, sans-serif" font-weight="900" font-size="430" text-anchor="middle" fill="#FBFAF0" stroke="#0F3033" stroke-width="12" paint-order="stroke fill">R</text>
-      </svg>
+      <svg viewBox="22 12 94 92" aria-hidden="true"><use href="#roomie-mark"/></svg>
       <span>Roomie</span>
     </a>
     <div class="nav-links desktop">
@@ -212,14 +216,14 @@
   <section class="hero wrap">
     <div class="hero-grid">
       <div>
-        <p class="eyebrow">Beer Sheva · Ben-Gurion University</p>
-        <h1 class="hero-title display">Find your next room in Beer Sheva. Call the lister — no middleman.</h1>
-        <p class="hero-copy">Roomie is a free listings board built for BGU students. Browse real rooms and apartments near campus, then call the lister directly. No chat threads, no bidding wars, no account needed just to look.</p>
+        <p class="eyebrow">Rooms &amp; shared apartments</p>
+        <h1 class="hero-title display">Find your next room. Call the lister — no middleman.</h1>
+        <p class="hero-copy">Roomie is a free listings board built for students. Browse real rooms and apartments near campus, then call the lister directly. No chat threads, no bidding wars, no account needed just to look.</p>
         <div class="hero-cta-row">
           <a href="#waitlist" class="btn btn-primary focus-ring">Get notified at launch</a>
           <a href="#for-listers" class="btn btn-outline focus-ring">I have a room to list</a>
         </div>
-        <p class="hero-note">Android first. Beer Sheva only, for now.</p>
+        <p class="hero-note">Android first. Starting in Beer Sheva.</p>
       </div>
       <div class="hero-art">
         <div class="stage">
@@ -263,8 +267,8 @@
       <div class="steps">
         <article class="step-card">
           <span class="step-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
-          <h3>Search Beer Sheva</h3>
-          <p>Filter listings near BGU by price and move-in date. Every listing is a real room or apartment, not a lead form.</p>
+          <h3>Search your area</h3>
+          <p>Filter listings near campus by price and move-in date. Every listing is a real room or apartment, not a lead form.</p>
         </article>
         <article class="step-card">
           <span class="step-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></span>
@@ -285,11 +289,11 @@
       <div>
         <p class="eyebrow">For listers</p>
         <h2 class="display">Listing your room is free. It stays free.</h2>
-        <p class="body">Post a room or apartment in a few minutes. Your listing goes straight to BGU students searching Beer Sheva — no leads to chase, no commission.</p>
+        <p class="body">Post a room or apartment in a few minutes. Your listing goes straight to students searching your area — no leads to chase, no commission.</p>
         <ul class="check-list">
           <li><span class="tick"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Free to publish, no time limit</li>
           <li><span class="tick"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Your number shown only on your listing</li>
-          <li><span class="tick"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Beer Sheva students, not a general classifieds crowd</li>
+          <li><span class="tick"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Students looking near campus, not a general classifieds crowd</li>
         </ul>
       </div>
       <div class="lister-card">
@@ -309,8 +313,8 @@
       <div class="trust">
         <div class="trust-card">
           <span class="t-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#083f49" stroke-width="2" stroke-linecap="round"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></span>
-          <h3>Beer Sheva only, on purpose</h3>
-          <p>Built for one city and one campus, so listings are actually relevant instead of a national wall of noise.</p>
+          <h3>Focused by city, on purpose</h3>
+          <p>Built around one campus at a time, so listings are actually relevant instead of a national wall of noise.</p>
         </div>
         <div class="trust-card">
           <span class="t-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#083f49" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span>
@@ -328,12 +332,12 @@
 
   <section id="waitlist" class="closing wrap">
     <div class="closing-panel grain">
-      <p class="eyebrow" style="background:rgba(255,255,255,.12);color:#fffdf7;">Coming to Beer Sheva</p>
+      <p class="eyebrow" style="background:rgba(255,255,255,.12);color:#fffdf7;">Coming soon</p>
       <h2 class="display">Be first to know when Roomie opens up.</h2>
-      <p>Leave your email and we'll let you know the moment Roomie is live for seekers and listers in Beer Sheva.</p>
+      <p>Leave your email and we'll let you know the moment Roomie is live for seekers and listers in your city.</p>
       <form class="waitlist-form" action="mailto:noam123av@gmail.com" method="post" enctype="text/plain">
         <label for="waitlist-email" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);">Email address</label>
-        <input id="waitlist-email" name="email" type="email" required placeholder="you@bgu.ac.il" class="focus-ring">
+        <input id="waitlist-email" name="email" type="email" required placeholder="you@example.com" class="focus-ring">
         <button type="submit" class="btn btn-primary focus-ring">Notify me</button>
       </form>
     </div>
@@ -343,26 +347,7 @@
 <footer class="wrap">
   <div class="foot-row">
     <div class="brand">
-      <svg viewBox="217 144 731 661" width="26" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <defs>
-          <linearGradient id="foot-left" x1="512" y1="190" x2="296" y2="792" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stop-color="#2F8079"/><stop offset="100%" stop-color="#123B3E"/>
-          </linearGradient>
-          <linearGradient id="foot-right" x1="512" y1="190" x2="774" y2="792" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stop-color="#9CE0D2"/><stop offset="100%" stop-color="#3E9C93"/>
-          </linearGradient>
-          <linearGradient id="foot-arrow" x1="0" y1="0" x2="520" y2="0" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stop-color="#4B9C93"/><stop offset="100%" stop-color="#B7F0E2"/>
-          </linearGradient>
-        </defs>
-        <path d="M 512 190 L 296 400 L 250 400 L 250 452 L 296 452 L 296 792 L 728 792 L 728 452 L 774 452 L 774 400 L 728 400 Z" fill="none" stroke="#0F3033" stroke-width="26" stroke-linejoin="round"/>
-        <path d="M 512 190 L 296 400 L 250 400 L 250 452 L 296 452 L 296 792 L 512 792 Z" fill="url(#foot-left)"/>
-        <path d="M 512 190 L 512 792 L 728 792 L 728 452 L 774 452 L 774 400 L 728 400 Z" fill="url(#foot-right)"/>
-        <g transform="translate(618,656) rotate(-52)">
-          <path d="M 0 -30 L 340 -30 L 340 -104 L 520 0 L 340 104 L 340 30 L 0 30 Z" fill="url(#foot-arrow)" stroke="#0F3033" stroke-width="20" stroke-linejoin="round"/>
-        </g>
-        <text x="452" y="700" font-family="DejaVu Sans, Arial, sans-serif" font-weight="900" font-size="430" text-anchor="middle" fill="#FBFAF0" stroke="#0F3033" stroke-width="12" paint-order="stroke fill">R</text>
-      </svg>
+      <svg viewBox="22 12 94 92" width="26" aria-hidden="true"><use href="#roomie-mark"/></svg>
       <span style="font-weight:700;">Roomie</span>
     </div>
     <div class="foot-links">
@@ -370,7 +355,7 @@
       <a href="mailto:noam123av@gmail.com">Contact</a>
     </div>
   </div>
-  <p class="foot-copy" style="margin-top:18px;">© 2026 Roomie · Beer Sheva</p>
+  <p class="foot-copy" style="margin-top:18px;">© 2026 Roomie</p>
 </footer>
 
 </div>
