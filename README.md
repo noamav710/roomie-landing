@@ -7,7 +7,13 @@ commit to `main` and push to publish.
 
 `assets/` holds logo exports copied from `roomie/assets/images/`, used only for
 `<link rel="icon">` and social preview. The nav/footer brand mark is inlined as
-SVG in `index.html` so it stays crisp at any size.
+SVG in `index.html` so it stays crisp at any size — defined once as a `<g
+id="roomie-mark">` in a hidden `<svg>` near the top of `<body>`, then referenced
+by `<use>` in the header and footer. Edit it in one place.
+
+Draw the mark with paths, never `<text>`. An earlier version set the "R" as an
+SVG `<text>` in DejaVu Sans, which almost nobody has installed, so it silently
+fell back to Arial and the logo rendered differently on every machine.
 
 ## Deploying
 
@@ -46,7 +52,12 @@ changing claims:
 - Listing is free, always. An optional paid **boost** exists but **pricing is
   not finalized — don't publish a number.**
 - Never promise a boost gets more calls or a faster rental — only placement.
-- Android only, Beer Sheva only, for now.
+- Android only. The product really is one city (Beer Sheva) at v1 — but
+  **keep page copy city-agnostic.** Headline, features, listers, trust and
+  waitlist sections are deliberately written without a city or campus name so
+  expanding doesn't mean rewriting the page. Exactly one line names the launch
+  city, the hero note: "Android first. Starting in Beer Sheva." Say "starting
+  in", never "only" — `v1-scope.md` plans a second city once the first works.
 - No in-app chat — calling is the only contact method.
 - No verification badge, no account required to browse.
 - Location is on-device only; phone numbers are shown the way a printed flyer
