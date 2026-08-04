@@ -1,0 +1,7 @@
+# Unused hero video experiment — third-party logos + AI watermark, not shippable.
+# Kept on disk deliberately; must not be committed. See README "Known gaps".
+assets/videos/
+
+# OS cruft
+.DS_Store
+Thumbs.db

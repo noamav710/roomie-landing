@@ -112,6 +112,12 @@ them to a Formspree-branded thank-you page.
 - Hero graphic is an original SVG mockup — a map with rent pins — not a real
   product screenshot. It must stay a *map*: v1 has no list UI, and the previous
   art depicted a scrollable results list, which the app cannot show.
+- An AI-generated hero video was tried and rejected. It reproduced Facebook,
+  WhatsApp and Yad2 branding, carried a generative-AI watermark on every frame,
+  showed a listing *list*, and closed on a landlord chat thread — the exact
+  thing the hero copy says Roomie removes. The file is kept at `assets/videos/`
+  and gitignored. Any replacement must stay a map, show rent on pins and a real
+  phone call, and contain no third-party logos.
 - Play Store hi-res icon / feature graphic are Play Console assets, not files
   here. Swap the "Get notified at launch" CTA for a Play Store link once the
   listing is public.
