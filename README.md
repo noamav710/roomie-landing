@@ -109,15 +109,23 @@ them to a Formspree-branded thank-you page.
 
 ## Known gaps
 
-- Hero graphic is an original SVG mockup — a map with rent pins — not a real
-  product screenshot. It must stay a *map*: v1 has no list UI, and the previous
-  art depicted a scrollable results list, which the app cannot show.
-- An AI-generated hero video was tried and rejected. It reproduced Facebook,
-  WhatsApp and Yad2 branding, carried a generative-AI watermark on every frame,
-  showed a listing *list*, and closed on a landlord chat thread — the exact
-  thing the hero copy says Roomie removes. The file is kept at `assets/videos/`
-  and gitignored. Any replacement must stay a map, show rent on pins and a real
-  phone call, and contain no third-party logos.
+- The hero is a ~10.9s silent looping video, built by `tools/hero-video/`:
+  a 3.7s problem intro rendered from HTML, then a real screen recording of the
+  app (map → boosted pin → listing → contact card). The original SVG map mockup
+  is still in the page as fallback content inside the `<video>`. Whatever
+  replaces it must stay a *map*: v1 has no list UI, and an earlier version of
+  this art depicted a scrollable results list, which the app cannot show.
+- **The video does not show the Call button being pressed.** The shot list asks
+  for it, but the emulator ran out of memory partway through the session —
+  successive takes were truncated (12.5s → 8.8 → 8.3 → 7.9 → 4.2) and the last
+  attempt lost its Firebase connection entirely. The take that survived ends on
+  the contact card with the Call button visible, which is close but not the
+  intended beat. Worth a re-shoot when the machine is idle.
+- A first, AI-generated hero video was tried and rejected. It reproduced
+  Facebook, WhatsApp and Yad2 branding, carried a generative-AI watermark on
+  every frame, showed a listing *list*, and closed on a landlord chat thread —
+  the exact thing the hero copy says Roomie removes. That file is gone; the
+  rules it broke are recorded in `tools/hero-video/README.md`.
 - Play Store hi-res icon / feature graphic are Play Console assets, not files
   here. Swap the "Get notified at launch" CTA for a Play Store link once the
   listing is public.

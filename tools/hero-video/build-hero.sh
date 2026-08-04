@@ -62,10 +62,17 @@ ffmpeg -v error -y -i "$TMP/full.mp4" \
 # The poster is what shows before playback AND what prefers-reduced-motion
 # users see permanently. It must therefore be the product, never the intro:
 # a still of the chaos would leave those users having seen the problem and
-# never the solution. Default lands ~2.5s into the app section.
-POSTER_AT=$(awk -v d=3.7 'BEGIN{printf "%.2f", d + 2.5}')
-echo "==> poster at ${POSTER_AT}s (inside the app section, never the intro)"
-ffmpeg -v error -y -ss "$POSTER_AT" -i "$TMP/full.mp4" -frames:v 1 -q:v 3 \
+# never the solution.
+#
+# Taken near the END of the app section, not part-way in. At +2.5s the sheet
+# was still animating open and the poster came out as a loading spinner over a
+# half-blank panel — the worst possible still to freeze for a reduced-motion
+# user. The last moment of the take is the only one guaranteed to be settled.
+POSTER_AT=$(awk -v d=3.7 -v a="$DUR" 'BEGIN{printf "%.2f", d + a - 0.35}')
+echo "==> poster at ${POSTER_AT}s (end of the app section, never the intro)"
+# -ss after -i: accurate seek. Fast seek lands on the wrong frame here, and
+# screenrecord output is variable-frame-rate, which makes the drift worse.
+ffmpeg -v error -y -i "$TMP/full.mp4" -ss "$POSTER_AT" -frames:v 1 -q:v 3 \
   "$OUT/hero-poster.jpg"
 
 echo

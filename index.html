@@ -122,6 +122,24 @@
     display: flex; align-items: center; justify-content: center; padding: 30px;
   }
   .hero-art svg { width: 100%; height: 100%; }
+  .hero-video-wrap { position: relative; width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center; }
+  /* Contained, not covered: the file is 9:20 and the stage is 4:5, so
+     object-fit:cover would throw away well over half the frame. Height-first
+     sizing keeps the whole phone screen visible at every stage width. */
+  .hero-video { height: 100%; width: auto; max-width: 100%; display: block;
+    border-radius: 22px; background: var(--mint);
+    box-shadow: 0 14px 34px rgba(8,63,73,.22); }
+  .hero-video-toggle {
+    position: absolute; right: 6px; bottom: 6px; z-index: 2;
+    width: 40px; height: 40px; border-radius: 50%; border: 0; cursor: pointer;
+    background: rgba(8,63,73,.72); color: var(--paper);
+    display: grid; place-items: center; font-size: 15px; line-height: 1;
+  }
+  .hero-video-toggle:focus-visible { outline: 3px solid var(--coral); outline-offset: 2px; }
+  @media (prefers-reduced-motion: reduce) {
+    .hero-video-toggle { display: none; }
+  }
   .hero-badge {
     position: absolute; left: -18px; bottom: -18px; background: var(--ink); color: var(--paper);
     border-radius: 18px; padding: 16px 20px; box-shadow: 0 10px 30px rgba(8,63,73,.25);
@@ -247,6 +265,13 @@
       </div>
       <div class="hero-art">
         <div class="stage">
+          <div class="hero-video-wrap">
+            <video id="hero-video" class="hero-video"
+                   autoplay muted loop playsinline preload="metadata"
+                   poster="assets/videos/hero-poster.jpg"
+                   aria-label="Roomie: rooms on a map, the rent on each pin, and the lister's phone number one tap away">
+              <source src="assets/videos/hero.webm" type="video/webm">
+              <source src="assets/videos/hero.mp4" type="video/mp4">
           <svg viewBox="0 0 360 380" aria-hidden="true">
             <g stroke="#cfe3db" stroke-width="9" stroke-linecap="round" fill="none">
               <path d="M-10 128 H370"/>
@@ -289,6 +314,10 @@
               </g>
             </g>
           </svg>
+            </video>
+            <button class="hero-video-toggle" id="hero-video-toggle"
+                    type="button" aria-label="Pause video">&#10073;&#10073;</button>
+          </div>
         </div>
         <div class="hero-badge">
           <span class="num">₪0</span>
@@ -542,6 +571,37 @@
       menuButton.setAttribute('aria-expanded', 'false');
     });
   });
+</script>
+<script>
+  (function () {
+    var v = document.getElementById('hero-video');
+    var b = document.getElementById('hero-video-toggle');
+    if (!v || !b) return;
+
+    // WCAG 2.2.2: anything that autoplays and moves for more than 5 seconds
+    // needs a way to stop it. The loop is ~10.9s.
+    function sync() {
+      var paused = v.paused;
+      b.innerHTML = paused ? '&#9654;' : '&#10073;&#10073;';
+      b.setAttribute('aria-label', paused ? 'Play video' : 'Pause video');
+    }
+    b.addEventListener('click', function () {
+      if (v.paused) { v.play(); } else { v.pause(); }
+      sync();
+    });
+    v.addEventListener('play', sync);
+    v.addEventListener('pause', sync);
+
+    // Respect the OS setting: hold the poster frame instead of playing.
+    var mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    function applyMotion() {
+      if (mq.matches) { v.removeAttribute('autoplay'); v.pause(); }
+    }
+    mq.addEventListener ? mq.addEventListener('change', applyMotion)
+                        : mq.addListener(applyMotion);
+    applyMotion();
+    sync();
+  })();
 </script>
 </body>
 </html>

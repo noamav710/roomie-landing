@@ -1,6 +1,11 @@
-# Unused hero video experiment — third-party logos + AI watermark, not shippable.
-# Kept on disk deliberately; must not be committed. See README "Known gaps".
-assets/videos/
+# The hero video is now built from a real screen recording and IS committed —
+# see tools/hero-video/. The rule that used to ignore assets/videos/ was there
+# to keep an unshippable AI-generated version out of the repo; that file is
+# gone, so the directory is tracked again.
+
+# Build artefacts from tools/hero-video
+tools/hero-video/node_modules/
+tools/hero-video/frames/
 
 # OS cruft
 .DS_Store
