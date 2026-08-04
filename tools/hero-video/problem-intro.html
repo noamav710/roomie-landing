@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Roomie hero — problem intro</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet">
+<style>
+  /* Rendered at the emulator's native size so it concatenates with the app
+     footage without any rescaling. 1080x2400 = 9:20. */
+  :root {
+    --night:  #05232a;
+    --paper:  #fffdf7;
+    --mint:   #d8eee5;
+    --in-bg:  #24383f;
+    --in-fg:  #cfe0e3;
+    --out-bg: #0e4d5a;
+    --out-fg: #e8f4f2;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1080px; height: 2400px; overflow: hidden; }
+  body { font-family: "DM Sans", system-ui, sans-serif; background: #000; }
+
+  #stage {
+    position: relative; width: 1080px; height: 2400px; overflow: hidden;
+    background: var(--night);
+  }
+  /* Lightens to mint on the way out, handing off to the map footage. */
+  #wash {
+    position: absolute; inset: 0; background: var(--mint); opacity: 0;
+  }
+
+  #clock {
+    position: absolute; left: 0; right: 0; text-align: center;
+    color: var(--paper); font-weight: 500; font-variant-numeric: tabular-nums;
+    letter-spacing: .02em;
+  }
+
+  #bubbles { position: absolute; inset: 0; }
+  .b {
+    position: absolute; border-radius: 40px; padding: 34px 44px;
+    font-size: 52px; line-height: 1.15; max-width: 620px;
+    box-shadow: 0 18px 40px rgba(0,0,0,.28);
+  }
+  .b.in  { left: 60px;  background: var(--in-bg);  color: var(--in-fg);
+           border-bottom-left-radius: 12px; }
+  .b.out { right: 60px; background: var(--out-bg); color: var(--out-fg);
+           border-bottom-right-radius: 12px; text-align: right; }
+
+  #scrim {
+    position: absolute; inset: 0; background: var(--night); opacity: 0;
+  }
+  #line {
+    position: absolute; left: 80px; right: 80px; top: 1080px;
+    text-align: center; color: var(--paper);
+    font-family: "Fraunces", Georgia, serif; font-weight: 700;
+    font-size: 128px; line-height: 1.05; letter-spacing: -.02em;
+    opacity: 0;
+  }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="bubbles"></div>
+  <div id="scrim"></div>
+  <div id="line">Still no room.</div>
+  <div id="clock">23:47</div>
+  <div id="wash"></div>
+</div>
+
+<script>
+/* Deterministic, frame-addressable animation.
+
+   Nothing here uses CSS animations or requestAnimationFrame: the capture
+   script calls __render(t) for an exact t and screenshots. That makes the
+   output identical on every run and immune to dropped frames or timing
+   drift, which matters because the result is concatenated with real
+   footage at a fixed frame rate. */
+
+/* 3.7s, not 4.0: at 4.0 the last ~13 frames were a byte-identical flat mint
+   hold. A short breath before the cut to the map is good, half a second of
+   nothing inside an 11s loop is not. */
+const DURATION = 3.7;          // seconds
+const W = 1080, H = 2400;
+
+/* Real things people actually send in housing groups. Deliberately no
+   brand names and no imitated client UI — naming a competitor in words is
+   nominative fair use, but reproducing their marks is not, and that is
+   what made the first hero video unusable. */
+const MESSAGES = [
+  { t: 'Still available?',        side: 'out' },
+  { t: 'Is this still relevant?', side: 'out' },
+  { t: 'Sorry, just rented',      side: 'in'  },
+  { t: 'Hi, is the room taken?',  side: 'out' },
+  { t: 'Anyone?',                 side: 'out' },
+  { t: 'Already gone',            side: 'in'  },
+  { t: 'Still looking?',          side: 'in'  },
+  { t: 'Did anyone answer?',      side: 'out' },
+  { t: 'Hello?',                  side: 'out' },
+  { t: 'Rented already',          side: 'in'  },
+  { t: 'Is it still free?',       side: 'out' },
+  { t: '???',                     side: 'out' },
+  { t: 'Taken, sorry',            side: 'in'  },
+  { t: 'Still looking for a room',side: 'out' },
+];
+
+/* Appear times accelerate: the flood should feel like it is outrunning you. */
+const FIRST = 0.55, LAST = 2.85;
+const APPEAR = MESSAGES.map((_, i) => {
+  const p = i / (MESSAGES.length - 1);
+  return FIRST + (LAST - FIRST) * Math.pow(p, 1.55);
+});
+
+const GAP = 26, ENTER = 0.22;
+const EXIT_START = 2.92, EXIT_END = 3.40;
+
+const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+const lerp  = (a, b, u) => a + (b - a) * u;
+const ease  = u => 1 - Math.pow(1 - u, 3);            // cubic out
+const easeIn= u => u * u;
+
+const bubblesEl = document.getElementById('bubbles');
+const nodes = MESSAGES.map(m => {
+  const el = document.createElement('div');
+  el.className = 'b ' + m.side;
+  el.textContent = m.t;
+  bubblesEl.appendChild(el);
+  return el;
+});
+
+/* Heights depend on wrapping, so measure once after layout and cache. */
+let heights = [], tops = [];
+function measure() {
+  heights = nodes.map(el => el.offsetHeight);
+  tops = [];
+  let y = 0;
+  for (let i = 0; i < heights.length; i++) { tops.push(y); y += heights[i] + GAP; }
+}
+
+function stackHeightAt(n) {           // height of the first n bubbles
+  if (n <= 0) return 0;
+  return tops[n - 1] + heights[n - 1];
+}
+
+function __render(t) {
+  t = clamp(t, 0, DURATION);
+
+  /* Clock: large and centred, then settles to a status-bar line. */
+  const cl = document.getElementById('clock');
+  const intro = clamp(t / 0.42, 0, 1);
+  const settle = clamp((t - 0.42) / 0.30, 0, 1);
+  const size = lerp(200, 54, ease(settle));
+  const top  = lerp(H / 2 - 140, 96, ease(settle));
+  cl.style.fontSize = size + 'px';
+  cl.style.top = top + 'px';
+  cl.style.opacity = String(lerp(0, 0.95, ease(intro)) * (1 - clamp((t - EXIT_START) / 0.35, 0, 1)));
+
+  /* How many bubbles have landed, and how far the stack has scrolled. */
+  let shown = 0;
+  for (let i = 0; i < APPEAR.length; i++) if (t >= APPEAR[i]) shown = i + 1;
+  const anchor = 2150;                       // newest bubble's bottom edge
+  const scroll = anchor - stackHeightAt(shown);
+
+  const exit = clamp((t - EXIT_START) / (EXIT_END - EXIT_START), 0, 1);
+
+  nodes.forEach((el, i) => {
+    const dt = t - APPEAR[i];
+    if (dt < 0) { el.style.opacity = '0'; return; }
+
+    const u = ease(clamp(dt / ENTER, 0, 1));
+    const y = tops[i] + scroll + lerp(46, 0, u);
+    const s = lerp(0.94, 1, u);
+
+    /* Older bubbles recede slightly so the newest reads first. */
+    const depth = clamp((shown - 1 - i) / 6, 0, 1);
+    let op = lerp(1, 0.42, depth) * u;
+
+    let extra = 0;
+    if (exit > 0) { op *= (1 - exit); extra = easeIn(exit) * 420; }
+
+    el.style.opacity = String(op);
+    el.style.transform = `translateY(${y + extra}px) scale(${s})`;
+  });
+
+  /* The line lands over the pile, then leaves with it. */
+  const lineIn  = clamp((t - 2.22) / 0.36, 0, 1);
+  const lineOut = clamp((t - EXIT_START) / 0.30, 0, 1);
+  const lineOp  = ease(lineIn) * (1 - lineOut);
+  const lineEl = document.getElementById('line');
+  lineEl.style.opacity = String(lineOp);
+  lineEl.style.transform = `translateY(${lerp(30, 0, ease(lineIn))}px)`;
+  document.getElementById('scrim').style.opacity = String(lineOp * 0.55);
+
+  /* Wash to mint so the cut into the map footage is not a hard flash. */
+  const wash = clamp((t - 3.08) / 0.50, 0, 1);
+  document.getElementById('wash').style.opacity = String(ease(wash));
+}
+
+window.__render = __render;
+window.__duration = DURATION;
+window.__ready = (async () => {
+  if (document.fonts) await document.fonts.ready;
+  measure();
+  __render(0);
+  return true;
+})();
+</script>
+</body>
+</html>

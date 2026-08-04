@@ -1,0 +1,13 @@
+{
+  "name": "roomie-hero-video",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Builds the landing page hero video: renders the problem intro, concatenates it with the app screen recording, encodes mp4/webm and a poster.",
+  "type": "module",
+  "scripts": {
+    "capture": "node capture-intro.mjs"
+  },
+  "devDependencies": {
+    "playwright": "1.62.1"
+  }
+}
